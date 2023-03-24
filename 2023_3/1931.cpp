@@ -11,6 +11,7 @@ int N;
 int main(){
     cin >> N;
     
+    
     vector<pair<int, int>> t;
     
     for(int i=0; i<N; i++){
