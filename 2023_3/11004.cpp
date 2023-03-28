@@ -6,7 +6,7 @@ using namespace std;
 
 int N, K;
 
-int m[5000001];
+int m[51];
 
 void p(int low, int high){
     
@@ -20,7 +20,7 @@ void p(int low, int high){
     int j = high;
     
     
-    while(i<=j){
+    while(i<=j){  // exit condition : 피벗 위치 선정 완료
         
         while(pivot > m[i]){
             i++;
@@ -29,14 +29,14 @@ void p(int low, int high){
             j--;
         }
         
-        if(i <= j){  // exit condition
+        if(i <= j){  // 피벗 위치 도달 -> 피벗 위치 조정
             swap(m[i], m[j]);
             i++;
             j--;
         }
     }
-    p(low, j);
-    p(i, high);
+    p(low, j);  // 피벗기준 왼쪽, j인 이유는 i-j 역전 때문에
+    p(i, high);  // 피벗기준 오른쪽, i인 이유는 i-j 역전 때문에
 }
 
 
