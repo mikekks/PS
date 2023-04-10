@@ -1,55 +1,54 @@
-#include<iostream>
-#include<algorithm>
-#include<vector>
-#include<queue>
+#include <iostream>
+#include <vector>
+#include <queue>
+#define MAX 100001
+
 using namespace std;
 
-int n, u ,v, cost;
-int node, ans;
-bool visit[100001];
-vector<pair<int, int>> graph[100001];
+int n;
+int visited[MAX];
+int ans;
+int node;
 
-void DFS(int x, int dist)
-{
-	visit[x] = true;
+vector<pair<int, int>> tree[MAX];
 
-	if (dist > ans)
-	{
-		ans = dist;
-		node = x;
-	}
-
-	for (int i = 0; i < graph[x].size(); i++)
-	{
-		int next_node = graph[x][i].first;
-		int next_dist = graph[x][i].second + dist;
-		if (!visit[next_node])
-		{
-			visit[next_node] = true;
-			DFS(next_node, next_dist);
-			visit[next_node] = false;
-		}
-	}
+void dfs(int v, int d){
+    visited[v] = 1;
+    
+    if(d > ans){
+        node = v;
+        ans = d;
+    }
+    
+    for(int i=0; i<tree[v].size(); i++){
+        int tv = tree[v][i].first;
+        int tw = tree[v][i].second + d;
+        
+        if(visited[tv] == 0){
+            visited[tv] = 1;
+            dfs(tv, tw);
+            visited[tv] = 0;
+        }
+    }
 }
 
-int main()
-{
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-
-	cin >> n;
-
-	for (int i = 1; i < n; i++)
-	{
-		cin >> u >> v >> cost;
-		graph[u].push_back({ v,cost });
-		graph[v].push_back({ u,cost });
-	}
-
-	DFS(1, 0);
-	ans = 0;
-	for (int i = 1; i <= n; i++)
-		visit[i] = false;
-	DFS(node, 0);
-	cout << ans << '\n';
+int main(){
+    scanf("%d", &n);
+    
+    for(int i=1; i<n; i++){
+        int t1,t2,w;
+        scanf("%d %d %d", &t1, &t2, &w);
+        
+        tree[t1].push_back({t2, w});
+        tree[t2].push_back({t1, w});
+    }
+    
+    
+    dfs(1, 0);
+    ans = 0;
+    for(int i=1; i<=n; i++)
+        visited[i] = 0;
+    dfs(node, 0);
+    
+    printf("%d\n", ans);
 }
