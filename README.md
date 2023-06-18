@@ -15,4 +15,9 @@ solved : 23
 
 ## 2023 5
 
-solved : 
+solved : 7
+
+## 2023 6
+
+solved : ~
+
