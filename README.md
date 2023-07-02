@@ -19,5 +19,9 @@ solved : 7
 
 ## 2023 6
 
+solved : 17
+
+## 2023 7
+
 solved : ~
 
