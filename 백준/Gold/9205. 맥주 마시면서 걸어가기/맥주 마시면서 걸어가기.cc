@@ -20,22 +20,16 @@ bool isVisit[MAX];  // 해당 편의점을 들리고는 절대 도착할 수 없
 
 bool dfs(int y, int x){
     
-    if(y == ey && x == ex){
-        cout << "happy" << '\n';
-        return true;
-    }
-    
-    if((ey-y + ex-x) <= 1000){
+    if(abs(ey-y) + abs(ex-x) <= 1000){
         cout << "happy" << '\n';
         return true;
     }
     
     bool ret = false;
     
-    
     for(int i=0; i<store.size(); i++){
         if(isVisit[i] == false){
-                int d = (store[i].first - y) + (store[i].second - x);
+                int d = abs(store[i].first - y) + abs(store[i].second - x);
                 if(d <= 1000){
                     isVisit[i] = true;
                     ret = dfs(store[i].first, store[i].second);
@@ -72,39 +66,11 @@ int main(void)
         
         cin >> ey >> ex;
         
-        queue<pair<int, int>> q;
-        q.push({sy, sx});
+        bool ret = dfs(sy, sx);
         
-        bool ret = false;
-        
-        while (!q.empty()) {
-            int cy = q.front().first;
-            int cx = q.front().second;
-            q.pop();
-            
-            if(abs(ey-cy) + abs(ex-cx) <= 1000){
-                ret = true;
-                break;
-            }
-            
-            for(int i=0; i<store.size(); i++){
-                if(isVisit[i] == false){
-                        int d = abs(store[i].first - cy) + abs(store[i].second - cx);
-                        if(d <= 1000){
-                            isVisit[i] = true;
-                            q.push({store[i].first, store[i].second});
-                        }
-                }
-            }
-        }
-        
-        if(ret){
-            cout << "happy" << '\n';
-        }
-        else{
+        if(ret == false){
             cout << "sad" << '\n';
         }
-        
         
     }
 
