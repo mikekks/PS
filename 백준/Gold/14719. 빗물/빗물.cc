@@ -1,89 +1,54 @@
-#include <iostream>
-#include <cstdio>
-#include <cmath>
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <cstring>
-#include <queue>
-#include <stack>
-
-#define MAX 505
-
-using namespace std;
-
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<stack>
+ 
+using std::cout; using std::cin;
+using std::vector;
+ 
 int H, W;
-int block[MAX];
-int height[MAX];
-int ans;
-int map[MAX][MAX];
-
-
-int main(void)
-{
-    cin >> H >> W;
-  
-    for(int i=1; i<=W; i++){
-        cin >> block[i];
-        for(int j=1; j<=block[i]; j++){
-            map[j][i] = 1;
-        }
-    }
-    
-    for(int h=1; h<=H; h++){
-        stack<int> st;
-        
-        for(int w=1; w<=W; w++){
-            if(map[h][w] == 1){
-                if(st.empty()){
-                    st.push(w);
-                }
-                else{
-                    int prev = st.top();
-                    st.pop();
-                    st.push(w);
-                    
-                    int water = w-prev-1;
-                    if(water > 0){
-                        ans += water;
-                    }
-                }
-            }
-        }
-    }
-    
-    
-//    for(int i=0; i<W; i++){
-//        if(st.empty()){
-//            st.push({i, block[i]});
-//            continue;
-//        }
-//
-//        int h = 987654321;
-//        int w = 987654321;
-//
-//        while (!st.empty() && block[i] >= st.top().second) {
-//            if(block[i] == st.top().second){
-//                w = st.top().first + 1;
-//                break;
-//            }
-//            else{
-//                w = st.top().first < w ? st.top().first : w;
-//                h = st.top().second < h ? st.top().second : h;
-//                st.pop();
-//            }
-//        }
-//
-//        if(h != 987654321 && w != 987654321 && !st.empty()){
-//            ans += (block[i]-h) * (i-w);
-//        }
-//
-//        st.push({i, block[i]});
-//
-//    }
-    
-    cout << ans << '\n';
-    
-
-    return 0;
+int answer;
+ 
+int main() {
+	std::ios::sync_with_stdio(false);
+	cin.tie(nullptr); cout.tie(nullptr);
+ 
+	std::stack<int> st;
+	cin >> H >> W;
+ 
+	int max = 0;
+ 
+	while (W--) {
+		int h;
+		cin >> h;
+		
+		int cnt = 0;
+		while (!st.empty() && st.top() < h) {
+ 
+			// 여기에 들어온 스택 원소들은 pop하고 다시 채워 놓을거 없이 버려도 된다. 
+			if (h > max && st.top()<=max) {  
+				answer += max - st.top();
+				st.pop();
+			
+			}
+            // 빗물을 계산하고 높이 h 만큼 다시 스택에 쌓는다. ( Key Point )
+			else {
+				answer += h - st.top();
+				st.pop();
+				cnt++;
+			}
+		}
+		if (cnt) {
+			for (int i = 0; i < cnt; i++) {
+				st.push(h);
+			}
+		}
+ 
+		max = std::max(max, h);  // 왼쪽 최고 값.
+		st.push(h);
+ 
+	}
+	cout << answer;
+ 
+	return 0;
 }
