@@ -4,20 +4,28 @@ public class Solution {
     public int solution(int[] people, int limit) {
         int answer = 0;
         
-        // 사람들의 몸무게를 오름차순으로 정렬
-        Arrays.sort(people);
+        // 최대한 꽉꽉 채워서 태운다.
+        // 200 * 50000 == 1천만
+        Integer[] list = Arrays.stream(people).boxed().toArray(Integer[]::new);
+
+        Arrays.sort(list, (o1, o2) -> o2-o1);
         
-        int left = 0; // 가장 가벼운 사람을 가리키는 포인터
-        int right = people.length - 1; // 가장 무거운 사람을 가리키는 포인터
+        int[] w = new int[245];
+        for(int i : list){
+            w[i]++;
+        }
         
-        while (left <= right) {
-            // 가장 무거운 사람과 가장 가벼운 사람을 태울 수 있으면 함께 태운다.
-            if (people[left] + people[right] <= limit) {
-                left++; // 가장 가벼운 사람도 태움
+        for(int i : list){
+            if(w[i] == 0) continue;
+            
+            w[i]--;
+            
+            for(int j=limit-i; j>= 1; j--){
+                if(w[j] >= 1){
+                    w[j]--;
+                    break;
+                }
             }
-            // 무거운 사람은 항상 보트에 태움
-            right--; 
-            // 보트 한 대 사용
             answer++;
         }
         
