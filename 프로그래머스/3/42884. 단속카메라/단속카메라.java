@@ -18,14 +18,10 @@ class Solution {
     public int solution(int[][] routes) {
         int answer = 0;
         
-        int min = 50000;
-        int max = -50000;
-        
         for(int i = 0; i< routes.length; i++){
-            min = routes[i][0] < min ? routes[i][0] : min;
-            max = routes[i][1] > max ? routes[i][1] : max;
             list.add(new Node(routes[i][0], routes[i][1]));
         }
+        
         Collections.sort(list, (o1, o2) -> o1.out - o2.out);
         
         int cam = -50000;
