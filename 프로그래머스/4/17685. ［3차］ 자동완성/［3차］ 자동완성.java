@@ -1,71 +1,49 @@
 import java.util.*;
 
-class Node{
-    Node[] child = new Node[26];
-    boolean isEnd = false;
-    int[] count = new int[26];
-    
-    public Node(){}
-}
-
 class Solution {
-    Node root = new Node();
     
     public int solution(String[] words) {
         int answer = 0;
         
         // 10분 : 이분탐색
+        Arrays.sort(words);
         
         for(int i=0; i<words.length; i++){
-            insert(words[i]);
-        }
-        
-        for(int i=0; i<words.length; i++){
-            answer += search(words[i]);
+            int cnt = 0;
+            if(i > 0){
+                cnt = getDiff(words[i], words[i-1]);
+            }
+            
+            if(i != words.length-1){
+                cnt = Math.max(cnt, getDiff(words[i], words[i+1]));
+            }
+            
+            if(cnt == words[i].length()){
+                answer += cnt;
+            }
+            else{
+                answer += cnt+1;
+            }
         }
         
         return answer;
         
     }
     
-    void insert(String target){
-        Node curNode = root;
+    int getDiff(String a, String b){
+        int idx = 0;
         
-        for(int i=0; i<target.length(); i++){
-            char cur = target.charAt(i);
-            int idx = cur - 'a';
-            if(curNode.child[idx] == null){
-                curNode.child[idx] = new Node();
+        for(int i=0; i < Math.min(a.length(), b.length()); i++){
+            if(a.charAt(i) == b.charAt(i)){
+                idx++;
             }
-            curNode.count[idx]++;
-            curNode = curNode.child[idx];
+            else{
+                break;
+            }
         }
         
-        curNode.isEnd = true;
+        return idx;
     }
     
-    int search(String target){
-        int cnt = 0;
-        Node curNode = root;
-        String curStr = "";
-        
-        for(int i=0; i<target.length(); i++){
-            char cur = target.charAt(i);
-            int idx = cur - 'a';
-            curStr += cur;
-            cnt++;
-            
-            if(curNode.count[idx] == 1){
-                return cnt;
-            }
-            
-            if(target.equals(curStr)){
-                return cnt;
-            }
-            
-            curNode =  curNode.child[idx];
-        }
-        
-        return 0;
-    }
+   
 }
