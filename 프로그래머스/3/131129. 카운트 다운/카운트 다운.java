@@ -36,15 +36,10 @@ class Solution {
 			}
 		}
 
-		Collections.sort(arr, (a, b) -> {
-			return a.n - b.n;
-		});
-
-
 		int[][][] dp = new int[65][target+1][2];
 		for(int i=0; i<=arr.size(); i++){
 			for(int j=1; j<=target; j++){
-				dp[i][j][0] = Integer.MAX_VALUE;
+				dp[i][j][0] = 987654321;
 				dp[i][j][1] = 0;
 			}
 		}
