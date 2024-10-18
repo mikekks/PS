@@ -1,10 +1,10 @@
 # [level 3] 블록 이동하기 - 60063 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/60063?language=javascript) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/60063?language=java) 
 
 ### 성능 요약
 
-메모리: 43.1 MB, 시간: 43.33 ms
+메모리: 95 MB, 시간: 39.59 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 10월 18일 21:52:16
+2024년 10월 18일 22:15:57
 
 ### 문제 설명
 

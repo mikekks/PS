@@ -18,8 +18,9 @@ class Node{
 
 class Solution {
     
-    int[] ud = {1,0,-1,0};
-    int[] lr = {0,1,0,-1};
+    int[] lr = {-1,1,0,0};
+    int[] ud = {0,0,-1,1};
+    
         
     public String getPoint(int y1, int x1, int y2, int x2){
 		int[][] p = {{y1, x1}, {y2, x2}};
@@ -39,6 +40,7 @@ class Solution {
         int m = board[0].length;
         int INF = Integer.MAX_VALUE;
         answer = INF;
+        
         
         PriorityQueue<Node> q = new PriorityQueue<>(new Comparator<Node>(){
             @Override
@@ -60,8 +62,6 @@ class Solution {
                 return cur.time;
             }
             
-            if(cur.time > map.get(getPoint(cur.y1, cur.x1, cur.y2, cur.x2))) continue;
-            
             
             for(int i=0; i<4; i++){
                 int n_y1 = cur.y1 + ud[i];
@@ -73,10 +73,12 @@ class Solution {
                 if(n_y2 >= n || n_x2 >= m || n_y2 < 0 || n_x2 < 0) continue;
                 if(board[n_y1][n_x1] == 1 || board[n_y2][n_x2] == 1) continue;
                 
-                if(cur.time+1 >= map.getOrDefault(getPoint(n_y1, n_x1, n_y2, n_x2), INF)) continue;
+                if(cur.time+1 < map.getOrDefault(getPoint(n_y1, n_x1, n_y2, n_x2), INF)){
+                    q.add(new Node(n_y1, n_x1, n_y2, n_x2, cur.time+1));
+                    map.put(getPoint(n_y1, n_x1, n_y2, n_x2), cur.time+1);
+                }
                 
-                q.add(new Node(n_y1, n_x1, n_y2, n_x2, cur.time+1));
-                map.put(getPoint(n_y1, n_x1, n_y2, n_x2), cur.time+1);
+                
                 
                 if(cur.y1 == cur.y2 && ud[i] != 0){
                     if(cur.time+1 < map.getOrDefault(getPoint(cur.y1, cur.x1, n_y1, n_x1), INF)){
@@ -89,7 +91,7 @@ class Solution {
                         map.put(getPoint(cur.y2, cur.x2, n_y2, n_x2), cur.time+1);
                     }
                 }
-                if(cur.x1 == cur.x2 && lr[i] != 0){
+                else if(cur.x1 == cur.x2 && lr[i] != 0){
                     if(cur.time+1 < map.getOrDefault(getPoint(cur.y1, cur.x1, n_y1, n_x1), INF)){
                         q.add(new Node(cur.y1, cur.x1, n_y1, n_x1, cur.time+1));
                         map.put(getPoint(cur.y1, cur.x1, n_y1, n_x1), cur.time+1);
