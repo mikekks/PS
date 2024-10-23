@@ -14,31 +14,28 @@ public class Main {
 		makeTable(s);
 
 		System.out.println(answer);
+
 	}
 
-	public static void makeTable(String pattern) {
-		int pLen = pattern.length();
+	public static void makeTable(String str){
+		int sLen = str.length();
 
-		for(int k=0; k<pLen; k++){
-			String sub = pattern.substring(k);
-			int[] table = new int[sub.length()];
+		for(int k=0; k<sLen; k++){
+			String sub = str.substring(k);
+			int[] pi = new int[sub.length()];
 
 			int index = 0;
-			for(int i = 1; i < sub.length(); i++) {
-			/* index > 0 => 문자열 매칭이 시작됨
-			  	연속으로 일치하지 않으면 index 값을 돌려주어 다시 매칭 시작 */
-				while(index > 0 && sub.charAt(i) != sub.charAt(index)) {
-					index = table[index - 1];
+			for(int i=1; i<sub.length(); i++){
+
+				while(index > 0 && sub.charAt(index) != sub.charAt(i)){
+					index = pi[index-1];
 				}
 
-				if(sub.charAt(i) == sub.charAt(index)) {
-					index += 1;
-					table[i] = index;
+				if(sub.charAt(index) == sub.charAt(i)){
+					index++;
+					pi[i] = index;
+					answer = Math.max(answer, index);
 				}
-			}
-
-			for(int ret : table){
-				answer = Math.max(ret, answer);
 			}
 
 		}
