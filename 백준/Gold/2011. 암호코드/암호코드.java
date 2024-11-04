@@ -9,8 +9,8 @@ public class Main {
 
 		String input = br.readLine();
 
-		long[] dp = new long[5005];
-		long MOD = 1000000;
+		long[] dp = new long[input.length()];
+		long MOD = 1_000_000;
 
 		if (input.charAt(0) >= '1' && input.charAt(0) <= '9') {
 			dp[0] = 1;
