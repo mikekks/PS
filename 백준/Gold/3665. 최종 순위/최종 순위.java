@@ -41,24 +41,14 @@ class Main {
 					ingree[a]++;
 					ingree[b]--;
 					list[b].add(a);
-
-					for(int k=0; k<list[a].size(); k++){
-						if(list[a].get(k) == b){
-							list[a].remove(k);
-						}
-					}
+					list[a].remove((Integer) b);
 
 				}
 				else {
 					ingree[a]--;
 					ingree[b]++;
 					list[a].add(b);
-
-					for(int k=0; k<list[b].size(); k++){
-						if(list[b].get(k) == b){
-							list[b].remove(k);
-						}
-					}
+					list[b].remove((Integer) a);
 				}
 			}
 
@@ -79,14 +69,8 @@ class Main {
 			}
 
 			List<Integer> ans = new ArrayList<>();
-			boolean isFin = false;
-			for(int i=1; i<=N; i++){
-				if(q.isEmpty()){
-					isFin = true;
-					System.out.println("IMPOSSIBLE");
-					break;
-				}
 
+			while(!q.isEmpty()){
 				Integer cur = q.poll();
 				ans.add(cur);
 
@@ -100,7 +84,10 @@ class Main {
 				}
 			}
 
-			if(isFin) continue;
+			if(ans.size() != N){
+				System.out.println("IMPOSSIBLE");
+				continue;
+			}
 
 			for(int i=0; i<ans.size(); i++){
 				System.out.print(ans.get(i) + " ");
