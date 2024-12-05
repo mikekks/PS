@@ -1,74 +1,115 @@
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-public class Main {
-	static class Circle{
-		int x;
-		int y;
-		int r;
-		
-		public Circle(int x, int y, int r) {
-			this.x = x;
-			this.y = y;
-			this.r = r;
-		}
-		
+class Point{
+	int y;
+	int x;
+	int r;
+
+	public Point(int y, int x, int r) {
+		this.y = y;
+		this.x = x;
+		this.r = r;
 	}
-	
-	static int[] parents;
-	public static void main(String[] args) throws IOException{
+}
+
+class Edge{
+	int s;
+	int e;
+
+	public Edge(int s, int e) {
+		this.s = s;
+		this.e = e;
+	}
+}
+
+class Main {
+
+	static int[] p;
+
+	public static int findParent(int n){
+		if(p[n] == n) return n;
+
+		return p[n] = findParent(p[n]);
+	}
+
+	public static void merge(int a, int b){
+		int pa = findParent(a);
+		int pb = findParent(b);
+
+		if(pa != pb){
+			if(pa < pb){
+				p[pb] = pa;
+			}
+			else{
+				p[pa] = pb;
+			}
+		}
+	}
+
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int tc = Integer.parseInt(br.readLine());
-		StringTokenizer st;
-		
-		while(tc-- > 0) {
-			int n = Integer.parseInt(br.readLine());
-			Circle[] circles = new Circle[n];
-			for(int i=0; i<n; i++) {
-				st = new StringTokenizer(br.readLine());
-				int x = Integer.parseInt(st.nextToken());
-				int y = Integer.parseInt(st.nextToken());
-				int r = Integer.parseInt(st.nextToken());
-				
-				circles[i] = new Circle(x, y, r);
+		String s = br.readLine();
+
+		int T = Integer.parseInt(s);
+
+		while(T > 0){
+			T--;
+
+			s = br.readLine();
+			int N = Integer.parseInt(s);
+			List<Point> points = new ArrayList<>();
+			List<Edge> edges = new ArrayList<>();
+
+			for(int i=0; i<N; i++){
+				s = br.readLine();
+				String[] split = s.split(" ");
+				int x = Integer.parseInt(split[0]);
+				int y = Integer.parseInt(split[1]);
+				int r = Integer.parseInt(split[2]);
+				points.add(new Point(y, x, r));
 			}
-			
-			parents = new int[n];
-			for(int i=0; i<n; i++) {
-				parents[i] = i;
-			}
-			
-			for(int i=0; i<n; i++) {
-				for(int j=i+1; j<n; j++) {
-					Circle c1 = circles[i];
-					Circle c2 = circles[j];
-					
-					if(find(i) == find(j)) continue;
-                    
-					int r = (int) Math.pow(c1.r+c2.r, 2);
-					int dis =  (int) (Math.pow(c1.x-c2.x, 2)+Math.pow(c1.y-c2.y, 2));
-					if(r >= dis) {
-						union(i, j);
+
+			for(int i=0; i<N; i++){
+				Point point = points.get(i);
+
+				for(int j=i+1; j<N; j++){
+					Point compare = points.get(j);
+
+					int diff = (int) (Math.pow(point.x - compare.x, 2) + Math.pow(point.y - compare.y, 2));
+
+					if(Math.pow(point.r + compare.r, 2) >= diff){
+						edges.add(new Edge(i, j));
 					}
 				}
 			}
-			
-			Set<Integer> set = new HashSet<>();
-			for(int num : parents) {
-				set.add(find(num));
+
+			p = new int[N];
+
+			for(int i=0; i<N; i++){
+				p[i] = i;
 			}
+
+			for(int i=0; i<edges.size(); i++){
+				Edge edge = edges.get(i);
+				merge(edge.s, edge.e);
+			}
+
+			int ans = 0;
+			Set<Integer> set = new HashSet<>();
+
+			for(int i=0; i<N; i++){
+				int parent = findParent(i);
+				set.add(parent);
+			}
+
 			System.out.println(set.size());
+
 		}
+
 	}
-	
-	static int find(int x) {
-		if(x == parents[x]) return x;
-		return parents[x] = find(parents[x]);
-	}
-	
-	static void union(int x, int y) {
-		x = find(x);
-		y = find(y);
-		parents[y] = x;
-	}
+
 }
