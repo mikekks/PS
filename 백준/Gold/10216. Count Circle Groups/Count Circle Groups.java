@@ -1,8 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 class Point{
 	int y;
@@ -99,14 +97,16 @@ class Main {
 			}
 
 			int ans = 0;
-			Set<Integer> set = new HashSet<>();
 
 			for(int i=0; i<N; i++){
 				int parent = findParent(i);
-				set.add(parent);
+
+				if(p[parent] == i){
+					ans++;
+				}
 			}
 
-			System.out.println(set.size());
+			System.out.println(ans);
 
 		}
 
