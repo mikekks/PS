@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -57,14 +58,14 @@ class Main {
 				for (Integer next : map[route.cur]) {
 					if (visit[next])
 						continue;
-					if(route.cur == a && next == b) continue;
+					if (route.cur == a && next == b)
+						continue;
 
 					HashSet<Integer> newSet = new HashSet<>(route.list);
 					newSet.add(next);
 					visit[next] = true;
 					q.add(new Route(next, route.cnt + 1, newSet));
 				}
-
 
 			}
 		}
@@ -98,42 +99,38 @@ class Main {
 
 		StringBuilder sb = new StringBuilder();
 
+		Queue<Route> q = new LinkedList<>();
+
+		int[] ans = new int[N + 1];
+		Arrays.fill(ans, -1);
+
 		for (int i = 1; i <= N; i++) {
 			int pa = findParent(i);
 
-			if (circularList.contains(pa)) {
-				sb.append(0 + " ");
-			} else {
-				Queue<Route> q = new LinkedList<>();
-				boolean[] visit = new boolean[N + 1];
-				q.add(new Route(i, 0, null));
-				visit[i] = true;
-
-				while(!q.isEmpty()){
-					Route route = q.poll();
-					boolean check = false;
-
-					for(Set<Integer> set : circularList){
-						if (set.contains(route.cur)) {
-							sb.append(route.cnt + " ");
-							check = true;
-							break;
-						}
-					}
-
-					if(check){
-						break;
-					}
-
-					for (Integer next : map[route.cur]) {
-						if (visit[next])
-							continue;
-
-						visit[next] = true;
-						q.add(new Route(next, route.cnt + 1, null));
-					}
+			for(Set<Integer> set : circularList) {
+				if (set.contains(i)) {
+					ans[i] = 0;
+					q.add(new Route(i, 0, null));
 				}
 			}
+
+		}
+
+		while (!q.isEmpty()) {
+			Route route = q.poll();
+
+			for (Integer next : map[route.cur]) {
+				if (ans[next] != -1)
+					continue;
+
+				ans[next] = route.cnt + 1;
+				q.add(new Route(next, route.cnt + 1, null));
+			}
+		}
+
+
+		for(int i=1; i<=N; i++){
+			sb.append(ans[i] + " ");
 		}
 
 		System.out.println(sb);
