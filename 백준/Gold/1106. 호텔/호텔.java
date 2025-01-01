@@ -1,66 +1,62 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
-class Node {
-	int n;
+class City {
 	int cost;
+	int award;
 
-	public Node(int n, int cost) {
-		this.n = n;
+	public City(int cost, int award) {
 		this.cost = cost;
+		this.award = award;
 	}
 }
 
-public class Main {
+class Main {
+	static int C, N;
+	static int ans = 0;
 
-	static int C;
-	static int N;
-	static int ans;
-	static List<Node> list = new ArrayList<>();
-
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-		String input = br.readLine();
-		String[] split = input.split(" ");
-
+		String s = br.readLine();
+		String[] split = s.split(" ");
 		C = Integer.parseInt(split[0]);
 		N = Integer.parseInt(split[1]);
-		ans = Integer.MAX_VALUE;
 
-		for (int i = 0; i < N; i++) {
-			input = br.readLine();
-			split = input.split(" ");
-			list.add(new Node(Integer.parseInt(split[1]), Integer.parseInt(split[0])));
+		List<City> cities = new ArrayList<>();
+
+		for (int i = 1; i <= N; i++) {
+			s = br.readLine();
+			split = s.split(" ");
+			int cost = Integer.parseInt(split[0]);
+			int people = Integer.parseInt(split[1]);
+
+			cities.add(new City(cost, people));
 		}
 
-		//list.sort((a, b) -> b.n / b.cost - a.n / a.cost);
+		int[] dp = new int[C + 105];
 
-		int[][] dp = new int[N + 1][C + 1];
+		for (int i = 1; i < C + 105; i++)
+			dp[i] = Integer.MAX_VALUE / 2;
 
-		for(int i=0; i<=N; i++){
-			for(int j=1; j<=C; j++) {
-				dp[i][j] = Integer.MAX_VALUE;
-			}
-		}
+		for (int i = 0; i < cities.size(); i++) {
+			for (int c = 1; c < C + 105; c++) {
+				City city = cities.get(i);
 
-		for(int i=1; i<=N; i++){
-			for(int j=1; j<=C; j++){
-				Node node = list.get(i-1);
-				dp[i][j] = dp[i-1][j];
-				if(j-node.n >= 0){
-					dp[i][j] = Math.min(dp[i][j], dp[i][j-node.n] + node.cost);
-				}
-				else if(j-node.n < 0){
-					dp[i][j] = Math.min(dp[i][j], node.cost);
+				if (city.award <= c) {
+					dp[c] = Math.min(dp[c], city.cost + dp[c - city.award]);
 				}
 			}
 		}
 
-		System.out.println(dp[N][C]);
+		int ans = Integer.MAX_VALUE;
+		for (int i = C; i < C + 105; i++) {
+			ans = Math.min(ans, dp[i]);
+		}
+
+		System.out.println(ans);
+
 	}
-
 }
