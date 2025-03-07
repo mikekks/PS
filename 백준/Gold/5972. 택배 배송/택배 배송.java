@@ -44,19 +44,18 @@ class Main {
 			adjMap[b].add(new Point(a, c));
 		}
 
-		int[] dp = new int[N + 1];
-
-		for(int i=1; i<=N; i++){
-			adjMap[i].sort((a,b) -> a.cost - b.cost);
-			dp[i] = Integer.MAX_VALUE / 2;
-		}
-
 		PriorityQueue<Point> q = new PriorityQueue<>(new Comparator<Point>() {
 			@Override
 			public int compare(Point p1, Point p2) {
 				return p1.cost - p2.cost;
 			}
 		});
+
+		int[] dp = new int[N + 1];
+
+		for(int i=1; i<=N; i++){
+			dp[i] = Integer.MAX_VALUE / 2;
+		}
 
 		q.add(new Point(1, 0));
 		dp[1] = 0;
@@ -77,9 +76,7 @@ class Main {
 				q.add(new Point(next.next, cur.cost + next.cost));
 				dp[next.next] = cur.cost + next.cost;
 			}
-
 		}
-
 	}
 
 }
