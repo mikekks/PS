@@ -45,13 +45,12 @@ class Main {
 
 			Queue<int[]> q = new LinkedList<>();
 			int[] times = new int[N + 1];
-			boolean[] visit = new boolean[N + 1];
 
 			for(int i=1; i<=N; i++) times[i] = Integer.MAX_VALUE / 2;
 
 			q.add(new int[] {C, 0});
 			times[C] = 0;
-			int count = 1;
+			int count = 0;
 
 			while (!q.isEmpty()){
 				int[] poll = q.poll();
@@ -63,11 +62,6 @@ class Main {
 
 					q.add(new int[] {next[0], time + next[1]});
 					times[next[0]] = time + next[1];
-
-					if(!visit[next[0]]){
-						visit[next[0]] = true;
-						count++;
-					}
 				}
 			}
 
@@ -75,6 +69,7 @@ class Main {
 			for(int i=1; i<=N; i++){
 				if(times[i] == Integer.MAX_VALUE / 2) continue;
 
+				count++;
 				maxTime = Math.max(maxTime, times[i]);
 			}
 
