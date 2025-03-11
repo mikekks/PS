@@ -30,7 +30,7 @@ class Main {
 		}
 
 		long left = 1L;
-		long right = (long) 1e18;
+		long right = 1000000000000000005L;
 
 		while(left < right){
 			long target = (left + right) / 2;
