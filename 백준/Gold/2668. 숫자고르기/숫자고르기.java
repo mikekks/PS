@@ -1,21 +1,41 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 class Main {
 
-	static int ans = Integer.MAX_VALUE / 2;
+	static int[] arr;
+	static boolean[] visit;
+	static boolean[] isFin;
+	static List<Integer> total = new ArrayList<>();
+
+	static void dfs(int cur){
+		visit[cur] = true;
+		int next = arr[cur];
+
+		if(!visit[next]){
+			dfs(next);
+		}
+		else if(!isFin[next]){
+			for(int tmp = next; tmp != cur ; tmp = arr[tmp]){
+				total.add(tmp);
+			}
+			total.add(cur);
+		}
+
+		isFin[cur] = true;
+	}
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 		String st = br.readLine();
 		int N = Integer.parseInt(st);
-		int ans = N;
 
-		int[] arr = new int[N + 1];
+		arr = new int[N + 1];
+		visit = new boolean[N + 1];
+		isFin = new boolean[N + 1];
+
 		List<Integer>[] map = new List[N + 1];
 
 		for (int i = 1; i <= N; i++)
@@ -27,31 +47,19 @@ class Main {
 			map[arr[i]].add(i);
 		}
 
-		boolean[] isDead = new boolean[N + 1];
-		boolean continueCheck = true;
-		while (continueCheck) {
-			continueCheck = false;
 
-			for (int i = 1; i <= N; i++) {
-				if (!isDead[i] && map[i].isEmpty()) {
+		for(int i=1; i<=N; i++){
+			if(visit[i]) continue;
 
-					int finalI = i;
-					map[arr[i]].removeIf(a -> a.equals(finalI));
-					isDead[i] = true;
-
-					continueCheck = true;
-					ans--;
-				}
-			}
+			dfs(i);
 		}
 
 		StringBuilder sb = new StringBuilder();
-		sb.append(ans + "\n");
+		sb.append(total.size() + "\n");
 
-		for (int i = 1; i <= N; i++) {
-			if (map[i].isEmpty()) continue;
-
-			sb.append(i + "\n");
+		total.sort((a,b) -> a-b);
+		for (Integer num : total) {
+			sb.append(num + "\n");
 		}
 
 		System.out.println(sb);
