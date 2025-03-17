@@ -22,9 +22,19 @@ class Main {
 			sb.append(ans + "\n");
 
 			long mid = 0;
-			PriorityQueue<Long> min_q = new PriorityQueue<>(Comparator.reverseOrder()); 
-			PriorityQueue<Long> max_q = new PriorityQueue<>(); 
-			
+			PriorityQueue<Long> min_q = new PriorityQueue<>(new Comparator<Long>() {
+				@Override
+				public int compare(Long o1, Long o2) {
+					return o2.compareTo(o1);
+				}
+			});
+			PriorityQueue<Long> max_q = new PriorityQueue<>(new Comparator<Long>() {
+				@Override
+				public int compare(Long o1, Long o2) {
+					return o1.compareTo(o2);
+				}
+			});
+
 			long[] arr = new long[N];
 
 			for (int i = 0; i < (N + 10) / 10; i++) {
