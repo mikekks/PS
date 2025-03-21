@@ -1,32 +1,27 @@
 import java.util.*;
 
-
 class Solution {
-	ArrayList<Integer>[] map;
-    boolean[] visited;
-    int answer;
 
+    int answer = 0;
+    List<Integer>[] map;
+    boolean[] visit;
+    boolean[] light;
+    
 	public int solution(int n, int[][] lighthouse) {
 		answer = 0;
+        map = new ArrayList[n+1];
+        visit = new boolean[n+1];
+        light = new boolean[n+1];
         
-	    map = new ArrayList[n + 1];
-        visited = new boolean[n + 1];
+        for(int i=1; i<=n; i++) map[i] = new ArrayList<>();
         
-        
-        for (int i = 1; i <= n; i++) {
-            map[i] = new ArrayList<>();
-        }
-
-        for (int[] edge : lighthouse) {
-            int a = edge[0];
-            int b = edge[1];
-            map[a].add(b);
-            map[b].add(a);
+	    for(int i=0; i<n-1; i++){
+            map[lighthouse[i][0]].add(lighthouse[i][1]);
+            map[lighthouse[i][1]].add(lighthouse[i][0]);
         }
         
-        visited[1] = true;
+        visit[1] = true;
         dfs(1);
-        
         
 		return answer;
 	}
@@ -35,13 +30,14 @@ class Solution {
         
         boolean turn = false;
         
-        for(int node: map[cur]){
-            if(!visited[node]){
-                visited[node] = true;
-                boolean ret = dfs(node);
-                if(!ret){
-                    turn = true;
-                }
+        for(Integer next : map[cur]){
+            if(visit[next]) continue;
+            
+            visit[next] = true;
+            boolean ret = dfs(next);
+            
+            if(!ret){
+                turn = true;
             }
         }
         
