@@ -26,11 +26,9 @@ class Main {
 		for(int i=1; i<=N; i++){
 			int idx = Integer.parseInt(split[i - 1]);
 			index[idx] = index[idx - 1] + 1;
+			ans = Math.max(ans, index[idx]);
 		}
-
-		Arrays.sort(index);
-
-		System.out.println(N - index[N]);
+		System.out.println(N - ans);
 
 	}
 }
