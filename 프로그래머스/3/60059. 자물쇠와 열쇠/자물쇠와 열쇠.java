@@ -1,6 +1,5 @@
 class Solution {
     public boolean solution(int[][] key, int[][] lock) {
-        
         int point = key.length - 1;     
         
         for(int x = 0; x < point + lock.length; x++) {
