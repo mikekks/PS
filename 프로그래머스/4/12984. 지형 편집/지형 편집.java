@@ -9,23 +9,24 @@ public class Solution {
         
         // 1. 이분탐색
         long start = 0;
-        long end = 1000000000;
+        long end = 1_000_000_000;
         
         while(start <= end){
                 
-            long mid = (start + end)/ 2;
+            long m1 = start + (end - start) / 3;
+            long m2 = end - (end - start) / 3;
                 
-            long leftCost = calculateCost(mid, land, P, Q);
-            long rightCost = calculateCost(mid+1, land, P, Q);
+            long cost1 = calculateCost(m1, land, P, Q);
+            long cost2 = calculateCost(m2, land, P, Q);
                 
-            if(leftCost > rightCost){
-                answer = rightCost;
-                start = mid+1;
+            if(cost1 > cost2){
+                start = m1+1;
             }
             else{
-                answer = leftCost;
-                end = mid-1;
+                end = m2-1;
             }
+            
+            answer = Math.min(answer, Math.min(cost1, cost2));
         }
         
         return answer;
