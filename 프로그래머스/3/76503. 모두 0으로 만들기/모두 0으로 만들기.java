@@ -4,7 +4,7 @@ class Solution {
     public long answer = 0;
     public int[][] edges;
     public long[] a;
-    List<Integer>[] map;
+    Map<Integer, Boolean>[] map;
     
     public long solution(int[] _a, int[][] _edges) {
         
@@ -13,58 +13,50 @@ class Solution {
         for(int i=0; i<a.length; i++){
             a[i] = _a[i];
         }
-        map = new List[a.length+5];
+        map = new HashMap[a.length+5];
         
         for(int i=0; i<a.length+5; i++){
-            map[i] = new ArrayList<>();
+            map[i] = new HashMap<>();
         }
         
         for(int[] e : edges){
-            map[e[0]].add(e[1]);
-            map[e[1]].add(e[0]);
+            map[e[0]].put(e[1], true);
+            map[e[1]].put(e[0], true);
         }
         
         Queue<Integer> q = new LinkedList<>();
-        int[] ingree = new int[a.length+5];
-        boolean[] visit = new boolean[a.length+5];
         
         for(int i=0; i<a.length; i++){
             if(map[i].size() == 1){
                 q.add(i);
-                visit[i] = true;
-                ingree[i]++;
             }
         }
                 
         while(!q.isEmpty()){
             int cur = q.poll();
             
-            for(int next : map[cur]){
-                if(!visit[next]){  // 부모라고 단정할 수 있나?
-                    a[next] += a[cur];
-                    answer += Math.abs(a[cur]);
-                    a[cur] = 0;
-                    ingree[next]++;
-                    
-                    if(ingree[next] == map[next].size() - 1){
-                        q.add(next);
-                        visit[next] = true;
-                    }
-                }
+            Set<Integer> set = map[cur].keySet();
+            
+            if(set.size() == 1){
+                Iterator<Integer> it = set.iterator();
+                int next = it.next();
+                
+                a[next] += a[cur];
+                answer += Math.abs(a[cur]);
+                a[cur] = 0;
+                
+                map[cur].remove(next);
+                map[next].remove(cur);
+                q.add(next);
+            }
+        }
+
+        for(int i=0; i<a.length; i++){
+            if(a[i] != 0){
+                return -1;
             }
         }
         
-        long tmp = 0;
-        long addtion = 0;
-        for(int i=0; i<a.length; i++){
-            tmp += a[i];
-            addtion = Math.max(addtion, a[i]);
-        }
-        
-        if(tmp != 0){
-            return -1;
-        }
-        
-        return answer + addtion;
+        return answer;
     }
 }
